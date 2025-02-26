@@ -12,11 +12,10 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private Animator anim;
     private Vector3 playerVelocity;
     [SerializeField] private float playerSpeed = 10f;
-    [SerializeField] private float jumpHeight = 2f;
+    [SerializeField] private float jumpHeight = 100f;
+    [SerializeField] private float rotationSpeed = 100f;
     private float gravityValue = 9.81f;
     private bool groundedPlayer;
-    private float turnSmoothTime=0.1f;
-    private float turnSmoothVelocity;
     
     
     // Start is called before the first frame update
@@ -36,7 +35,6 @@ public class PlayerControllerNetwork : NetworkBehaviour
         {
             playerVelocity.y = 0f; // Reset velocity when on the ground
         }
-        
             PlayerMove();
             PlayerJump();
 
@@ -48,30 +46,22 @@ public class PlayerControllerNetwork : NetworkBehaviour
     void PlayerMove()
     {
         Vector2 inputVector = playerInput.actions["Move"].ReadValue<Vector2>();
+        float forwardMovement = inputVector.y;
+        float rotationInput = inputVector.x;
 
-        if(inputVector!=Vector2.zero)
+        // Move forward and backward
+        Vector3 moveDirection = transform.forward * forwardMovement * playerSpeed * Time.deltaTime;
+        characterController.Move(moveDirection);
+
+        // Rotate left/right in place
+        if (Mathf.Abs(rotationInput) > 0.1f) // Prevents minor accidental rotation
         {
-        float horizontal = inputVector.x;
-        float vertical = inputVector.y;
-
-        Vector3 direction = new Vector3(horizontal,0f,vertical).normalized;
-
-        if(direction.magnitude>=0.1f)
-        {
-            float targetAngle = Mathf.Atan2(direction.x,direction.z)*Mathf.Rad2Deg;
-            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y,targetAngle,ref turnSmoothVelocity, turnSmoothTime);
-            transform.rotation=Quaternion.Euler(0f,angle,0f);
-
-            Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f)*Vector3.forward;
-            characterController.Move(moveDirection*playerSpeed*Time.deltaTime);
-            anim.SetFloat("Move",Mathf.Clamp(moveDirection.magnitude,0f,1f));
-            
+            float rotationAmount = rotationInput * rotationSpeed * Time.deltaTime;
+            transform.Rotate(Vector3.up, rotationAmount);
         }
-        }
-        else
-        {
-            anim.SetFloat("Move",0f);
-        }
+
+        // Animation handling
+        anim.SetFloat("Move", Mathf.Abs(forwardMovement));
     }
 
     void PlayerJump()

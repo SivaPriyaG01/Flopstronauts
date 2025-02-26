@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Networking;
 using Unity.Netcode;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 
 public class PlayerScript : NetworkBehaviour
 {
@@ -17,6 +18,7 @@ public class PlayerScript : NetworkBehaviour
     [SerializeField] float moveSpeed = 20f;
     [SerializeField] float jumpHeight = 20f;
     [SerializeField] float turnSpeed = 8f;
+    [SerializeField] private float rotationSpeed = 100f;
 
     
     // Start is called before the first frame update
@@ -30,40 +32,68 @@ public class PlayerScript : NetworkBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {   
-        Move();
+        //Move();
+        PlayerMovement();
         Jump();
     }
 
-    void Move()
-{
-    Vector2 inputVector = playerInput.actions["Move"].ReadValue<Vector2>();
-    float xAxisInput= inputVector.x;
-    float zAxisInput = inputVector.y;
+//     void Move()
+// {
+//     Vector2 inputVector = playerInput.actions["Move"].ReadValue<Vector2>();
 
-    
+//         if(inputVector!=Vector2.zero)
+//         {
+//         float horizontal = inputVector.x;
+//         float vertical = inputVector.y;
 
-    if (inputVector != Vector2.zero)
-    {
-        Vector3 direction = (transform.forward*zAxisInput + transform.right*xAxisInput).normalized;
-        currentXInput = Mathf.SmoothDamp(currentXInput,xAxisInput,ref turnSmoothVelocity, turnSmoothTime);
-        if (direction.magnitude >= 0.1f)
-        {
+//         Vector3 direction = new Vector3(horizontal,0f,vertical).normalized;
+
+//         if(direction.magnitude>=0.1f)
+//         {
+//             float targetAngle = Mathf.Atan2(direction.x,direction.z)*Mathf.Rad2Deg;
+//             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y,targetAngle,ref turnSmoothVelocity, turnSmoothTime);
+//             transform.rotation=Quaternion.Euler(0f,angle,0f);
+
+//             //Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f)*Vector3.forward;
+//             rb.MovePosition(rb.position + direction*moveSpeed*Time.deltaTime);
+//             anim.SetFloat("Move",Mathf.Clamp(direction.magnitude,0f,1f));
             
-            float targetAngle = Mathf.Atan2(currentXInput, direction.z) * Mathf.Rad2Deg;
-            //float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+//         }
+//         }
+//         else
+//         {
+//             anim.SetFloat("Move",0f);
+//             turnSmoothVelocity=0f;
+//         }
+// }
 
-            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
-
-            rb.MovePosition(rb.position + direction * moveSpeed * Time.deltaTime);
-            anim.SetFloat("Move", Mathf.Clamp(direction.magnitude, 0f, 1f));
-        }
-    }
-    else
+    void PlayerMovement()
     {
-        anim.SetFloat("Move", 0f);
-        turnSmoothVelocity = 0f; // Reset turn smoothing when not moving
+        Vector2 inputVector = playerInput.actions["Move"].ReadValue<Vector2>();
+        
+        if(inputVector != Vector2.zero)
+        {
+            float forwardInput = inputVector.y;
+            float rotationInput = inputVector.x;
+
+            if(Mathf.Abs(rotationInput)>0.1f)
+            {
+                float rotationAmount = rotationInput*rotationSpeed*Time.fixedDeltaTime;
+                rb.MoveRotation(rb.rotation * Quaternion.Euler(0f, rotationAmount, 0f));
+            }
+
+            Vector3 moveDirection = transform.forward * forwardInput * moveSpeed;
+            rb.velocity = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+            anim.SetFloat("Move",Mathf.Abs(forwardInput));
+        }
+        else
+        {
+            anim.SetFloat("Move",0f);
+        }
+        
+        
+
     }
-}
 
 
     void Jump()
