@@ -12,7 +12,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private Animator anim;
     private Vector3 playerVelocity;
     [SerializeField] private float playerSpeed = 10f;
-    [SerializeField] private float jumpHeight = 100f;
+    [SerializeField] private float jumpHeight = 7f;
     [SerializeField] private float rotationSpeed = 100f;
     private float gravityValue = 9.81f;
     private bool groundedPlayer;
@@ -66,10 +66,10 @@ public class PlayerControllerNetwork : NetworkBehaviour
 
     void PlayerJump()
     {
-        bool jumpPressed = playerInput.actions["Jump"].WasPressedThisFrame();
+        bool jumpPressed = playerInput.actions["Jump"].WasPerformedThisFrame();
         if(jumpPressed && groundedPlayer)
         {
-            playerVelocity.y=Mathf.Sqrt(-2f * gravityValue * jumpHeight);
+            playerVelocity.y=Mathf.Sqrt(2f * gravityValue * jumpHeight);
             anim.SetTrigger("Jump");
         }
     }
