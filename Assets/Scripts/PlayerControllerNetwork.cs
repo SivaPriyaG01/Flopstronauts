@@ -11,11 +11,14 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private CharacterController characterController;
     private Animator anim;
     private Vector3 playerVelocity;
+    [SerializeField] Transform cam;
     [SerializeField] private float playerSpeed = 10f;
     [SerializeField] private float jumpHeight = 7f;
     [SerializeField] private float rotationSpeed = 100f;
     private float gravityValue = 9.81f;
     private bool groundedPlayer;
+    private float turnSmoothVelocity;
+    private float turnSmoothTime = 0.2f;
     
     
     // Start is called before the first frame update
@@ -35,13 +38,44 @@ public class PlayerControllerNetwork : NetworkBehaviour
         {
             playerVelocity.y = 0f; // Reset velocity when on the ground
         }
-            PlayerMove();
+            //PlayerMove();
+            Move();
             PlayerJump();
 
         playerVelocity.y += -gravityValue*Time.deltaTime;
         characterController.Move(playerVelocity*Time.deltaTime);
         
     }
+
+
+    void Move()
+    {
+        Vector2 inputVector = playerInput.actions["Move"].ReadValue<Vector2>();
+        float verticalInput = inputVector.y;
+        float horizontalInput = inputVector.x;
+
+        if(inputVector != Vector2.zero)
+        {
+            Vector3 direction = (transform.forward*verticalInput + transform.right*horizontalInput).normalized;
+
+            if(direction.magnitude>0.1f)
+            {
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) + cam.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle,ref turnSmoothVelocity,turnSmoothTime);
+
+                Vector3 moveDirection = Quaternion.Euler(0f, angle, 0f)*Vector3.forward;
+                characterController.Move(moveDirection*playerSpeed*Time.deltaTime);
+                anim.SetFloat("Move",Mathf.Clamp(moveDirection.magnitude,0f,1f));
+            }
+
+        }
+        else
+        {
+            anim.SetFloat("Move",0f);
+        }
+    }
+
+
 
     void PlayerMove()
     {
