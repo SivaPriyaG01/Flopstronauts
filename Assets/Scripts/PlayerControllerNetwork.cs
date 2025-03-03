@@ -11,7 +11,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private CharacterController characterController;
     private Animator anim;
     private Vector3 playerVelocity;
-    [SerializeField] Transform cam;
+    private Transform cam;
     [SerializeField] private float playerSpeed = 10f;
     [SerializeField] private float jumpHeight = 7f;
     [SerializeField] private float rotationSpeed = 100f;
@@ -27,11 +27,14 @@ public class PlayerControllerNetwork : NetworkBehaviour
         playerInput = GetComponent<PlayerInput>();
         characterController = GetComponent<CharacterController>();
         anim=GetComponent<Animator>();
+        cam = GameObject.Find("ThirdPersonFollowCam").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(!IsOwner) return;
+
         groundedPlayer = characterController.isGrounded;
 
         if (groundedPlayer && playerVelocity.y < 0)
@@ -44,8 +47,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
 
         playerVelocity.y += -gravityValue*Time.deltaTime;
         characterController.Move(playerVelocity*Time.deltaTime);
-        
-    }
+        }
 
 
     void Move()
