@@ -4,9 +4,10 @@ using System.Collections.Generic;
 
 public class PlayerSpawner : NetworkBehaviour
 {
-    private Transform spawnAreaCenter; // This will be found automatically
+    private Transform spawnAreaCenter; // Found automatically
+    [SerializeField] private GameObject playerPrefab; // Assign the player prefab in the Inspector
     [SerializeField] private float areaSize = 3f; // Size of the spawn area
-    [SerializeField] private int maxPlayers = 20; // Max number of players
+    [SerializeField] private int maxPlayers = 20; // Maximum number of players
 
     private List<Vector3> spawnPositions = new List<Vector3>();
     private int nextSpawnIndex = 0;
@@ -15,7 +16,7 @@ public class PlayerSpawner : NetworkBehaviour
     {
         if (IsServer)
         {
-            // Try to find the spawn area by name or tag
+            // Find the spawn area dynamically
             GameObject spawnAreaObject = GameObject.Find("SpawnAreaCenter");
 
             if (spawnAreaObject == null)
@@ -37,8 +38,8 @@ public class PlayerSpawner : NetworkBehaviour
         for (int i = 0; i < count; i++)
         {
             Vector3 randomPos = spawnAreaCenter.position + new Vector3(
-                Random.Range(-areaSize / 2, areaSize / 2), 
-                0, 
+                Random.Range(-areaSize / 2, areaSize / 2),
+                0,
                 Random.Range(-areaSize / 2, areaSize / 2)
             );
             spawnPositions.Add(randomPos);
@@ -53,11 +54,19 @@ public class PlayerSpawner : NetworkBehaviour
             return;
         }
 
+        // Select a spawn position
         Vector3 spawnPos = spawnPositions[nextSpawnIndex];
         nextSpawnIndex = (nextSpawnIndex + 1) % spawnPositions.Count;
 
-        Transform playerTransform = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.transform;
-        playerTransform.position = spawnPos;
+        // Instantiate the player prefab
+        GameObject playerInstance = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
+
+        // Get the NetworkObject component and assign ownership
+        NetworkObject networkObject = playerInstance.GetComponent<NetworkObject>();
+        if (networkObject != null)
+        {
+            networkObject.SpawnWithOwnership(clientId);
+        }
     }
 
     private void OnDestroy()
