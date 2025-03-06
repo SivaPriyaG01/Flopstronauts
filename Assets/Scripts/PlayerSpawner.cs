@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
+using UnityEditor;
 
 public class PlayerSpawner : NetworkBehaviour
 {
@@ -8,9 +9,15 @@ public class PlayerSpawner : NetworkBehaviour
     [SerializeField] private GameObject playerPrefab; // Assign the player prefab in the Inspector
     [SerializeField] private float areaSize = 3f; // Size of the spawn area
     [SerializeField] private int maxPlayers = 20; // Maximum number of players
+    [SerializeField] List<Material> playerMaterial;
 
     private List<Vector3> spawnPositions = new List<Vector3>();
     private int nextSpawnIndex = 0;
+
+    public void Start()
+    {
+        
+    }
 
     public override void OnNetworkSpawn()
     {
@@ -58,6 +65,7 @@ public class PlayerSpawner : NetworkBehaviour
         Vector3 spawnPos = spawnPositions[nextSpawnIndex];
         nextSpawnIndex = (nextSpawnIndex + 1) % spawnPositions.Count;
 
+
         // Instantiate the player prefab
         GameObject playerInstance = Instantiate(playerPrefab, spawnPos, Quaternion.identity);
 
@@ -66,7 +74,7 @@ public class PlayerSpawner : NetworkBehaviour
         if (networkObject != null)
         {
             networkObject.SpawnWithOwnership(clientId);
-        }
+        }        
     }
 
     private void OnDestroy()
@@ -76,4 +84,5 @@ public class PlayerSpawner : NetworkBehaviour
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
         }
     }
+
 }

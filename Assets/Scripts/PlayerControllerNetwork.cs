@@ -41,7 +41,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
         {
             playerVelocity.y = 0f; // Reset velocity when on the ground
         }
-            //PlayerMove();
+        
             Move();
             PlayerJump();
 
@@ -77,30 +77,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
         }
     }
 
-
-
-    void PlayerMove()
-    {
-        Vector2 inputVector = playerInput.actions["Move"].ReadValue<Vector2>();
-        float forwardMovement = inputVector.y;
-        float rotationInput = inputVector.x;
-
-        // Move forward and backward
-        Vector3 moveDirection = transform.forward * forwardMovement * playerSpeed * Time.deltaTime;
-        characterController.Move(moveDirection);
-
-        // Rotate left/right in place
-        if (Mathf.Abs(rotationInput) > 0.1f) // Prevents minor accidental rotation
-        {
-            float rotationAmount = rotationInput * rotationSpeed * Time.deltaTime;
-            transform.Rotate(Vector3.up, rotationAmount);
-        }
-
-        // Animation handling
-        anim.SetFloat("Move", Mathf.Abs(forwardMovement));
-    }
-
-    void PlayerJump()
+void PlayerJump()
     {
         bool jumpPressed = playerInput.actions["Jump"].WasPerformedThisFrame();
         if(jumpPressed && groundedPlayer)
@@ -109,4 +86,5 @@ public class PlayerControllerNetwork : NetworkBehaviour
             anim.SetTrigger("Jump");
         }
     }
+    
 }
