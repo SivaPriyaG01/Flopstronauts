@@ -51,19 +51,34 @@ public class SpringActionScript : MonoBehaviour
         }
     }
 
-    private IEnumerator PushPlayer(CharacterController playerController, Transform hitTransform)
-    {
-        Vector3 pushDirection = hitTransform.position - transform.position; // Direction away from blade
-        pushDirection.y = 0; // Keep the force horizontal
-        pushDirection.Normalize();
+    // private IEnumerator PushPlayer(CharacterController playerController, Transform hitTransform)
+    // {
+    //     Vector3 pushDirection = hitTransform.position - transform.position; // Direction away from blade
+    //     //pushDirection.y = 0; // Keep the force horizontal
+    //     pushDirection.Normalize();
 
-        float elapsedTime = 0f;
-        while (elapsedTime < pushDuration)
-        {
-            playerController.Move(pushDirection * pushForce * Time.deltaTime);
-            elapsedTime += Time.deltaTime;
-            anim.SetTrigger("Action");
-            yield return null;
-        }
+    //     float elapsedTime = 0f;
+    //     while (elapsedTime < pushDuration)
+    //     {
+    //         playerController.Move(pushDirection * pushForce * Time.deltaTime);
+    //         elapsedTime += Time.deltaTime;
+    //         anim.SetTrigger("Action");
+    //         yield return null;
+    //     }
+
+    private IEnumerator PushPlayer(CharacterController playerController, Transform hitTransform)
+{
+    Vector3 pushDirection = Vector3.up; // Always push upwards
+    float elapsedTime = 0f;
+
+    while (elapsedTime < pushDuration)
+    {
+        playerController.Move(pushDirection * pushForce * Time.deltaTime);
+        elapsedTime += Time.deltaTime;
+        anim.SetTrigger("Action");
+        yield return null;
     }
 }
+
+    }
+
