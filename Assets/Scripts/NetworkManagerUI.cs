@@ -15,6 +15,7 @@ public class NetworkManagerUI : MonoBehaviour
     //[SerializeField] private Button serverButton;
     [SerializeField] private Button hostButton;
     [SerializeField] private Button clientButton;
+    [SerializeField] private Button exitButton;
     [SerializeField] private TMP_InputField joinInput;
     [SerializeField] private TextMeshProUGUI codeText;
 
@@ -27,6 +28,7 @@ public class NetworkManagerUI : MonoBehaviour
 
         hostButton.onClick.AddListener(CreateRelay);
         clientButton.onClick.AddListener(() => JoinRelay(joinInput.text));
+        exitButton.onClick.AddListener(ExitGame);
     }
 
     // private void StartServer()
@@ -53,5 +55,10 @@ public class NetworkManagerUI : MonoBehaviour
 
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
         NetworkManager.Singleton.StartClient();
+    }
+
+    private void ExitGame()
+    {
+        Application.Quit();
     }
 }
