@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Checkpoint
   - FinishLine
+  - VirtualCamera
+  - Messages
   layers:
   - Default
   - TransparentFX

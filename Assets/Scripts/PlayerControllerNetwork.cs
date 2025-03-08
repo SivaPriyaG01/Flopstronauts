@@ -1,7 +1,100 @@
+// using System.Collections;
+// using System.Collections.Generic;
+// using UnityEngine;
+// using UnityEngine.Networking;
+// using Unity.Netcode;
+// using UnityEngine.InputSystem;
+
+// public class PlayerControllerNetwork : NetworkBehaviour
+// {
+//     private PlayerInput playerInput;
+//     private CharacterController characterController;
+//     private Animator anim;
+//     private Vector3 playerVelocity;
+//     private Transform cam;
+//     private PlayerCameraSetup playerCamScript;
+//     [SerializeField] private float playerSpeed = 10f;
+//     [SerializeField] private float jumpHeight = 7f;
+//     [SerializeField] private float rotationSpeed = 100f;
+//     private float gravityValue = 9.81f;
+//     private bool groundedPlayer;
+//     private float turnSmoothVelocity;
+//     private float turnSmoothTime = 0.2f;
+    
+    
+//     // Start is called before the first frame update
+//     void Start()
+//     {
+//         playerInput = GetComponent<PlayerInput>();
+//         characterController = GetComponent<CharacterController>();
+//         anim=GetComponent<Animator>();
+//         //cam = GameObject.Find("ThirdPersonFollowCam").transform;
+//         cam = playerCamScript.vCam.transform;
+//     }
+
+//     // Update is called once per frame
+//     void Update()
+//     {
+//         if(!IsOwner) return;
+
+//         groundedPlayer = characterController.isGrounded;
+
+//         if (groundedPlayer && playerVelocity.y < 0)
+//         {
+//             playerVelocity.y = 0f; // Reset velocity when on the ground
+//         }
+        
+//             Move();
+//             PlayerJump();
+
+//         playerVelocity.y += -gravityValue*Time.deltaTime;
+//         characterController.Move(playerVelocity*Time.deltaTime);
+//         }
+
+
+//     void Move()
+//     {
+//         Vector2 inputVector = playerInput.actions["Move"].ReadValue<Vector2>();
+//         float verticalInput = inputVector.y;
+//         float horizontalInput = inputVector.x;
+
+//         if(inputVector != Vector2.zero)
+//         {
+//             Vector3 direction = (transform.forward*verticalInput + transform.right*horizontalInput).normalized;
+
+//             if(direction.magnitude>0.1f)
+//             {
+//                 float targetAngle = Mathf.Atan2(direction.x, direction.z)*Mathf.Rad2Deg + cam.eulerAngles.y;
+//                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle,ref turnSmoothVelocity,turnSmoothTime);
+//                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
+//                 Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f)*Vector3.forward;
+//                 characterController.Move(moveDirection*playerSpeed*Time.deltaTime);
+//                 anim.SetFloat("Move",Mathf.Clamp(moveDirection.magnitude,0f,1f));
+//             }
+
+//         }
+//         else
+//         {
+//             anim.SetFloat("Move",0f);
+//         }
+//     }
+
+// void PlayerJump()
+//     {
+//         bool jumpPressed = playerInput.actions["Jump"].WasPerformedThisFrame();
+//         if(jumpPressed && groundedPlayer)
+//         {
+//             playerVelocity.y=Mathf.Sqrt(2f * gravityValue * jumpHeight);
+//             anim.SetTrigger("Jump");
+//         }
+//     }
+    
+// }
+
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
 
@@ -12,28 +105,62 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private Animator anim;
     private Vector3 playerVelocity;
     private Transform cam;
+    private PlayerCameraSetup playerCamScript;
+
     [SerializeField] private float playerSpeed = 10f;
     [SerializeField] private float jumpHeight = 7f;
     [SerializeField] private float rotationSpeed = 100f;
+
     private float gravityValue = 9.81f;
     private bool groundedPlayer;
     private float turnSmoothVelocity;
     private float turnSmoothTime = 0.2f;
-    
-    
-    // Start is called before the first frame update
+
     void Start()
     {
+        // Ensure ownership check before assigning variables
+        if (!IsOwner) return;
+
         playerInput = GetComponent<PlayerInput>();
+        if (playerInput == null)
+        {
+            Debug.LogError("PlayerInput component is missing!");
+        }
+
         characterController = GetComponent<CharacterController>();
-        anim=GetComponent<Animator>();
+        if (characterController == null)
+        {
+            Debug.LogError("CharacterController component is missing!");
+        }
+
+        anim = GetComponent<Animator>();
+        if (anim == null)
+        {
+            Debug.LogWarning("Animator component is missing!");
+        }
+
+        // Assign Camera
+        // playerCamScript = GetComponent<PlayerCameraSetup>();
+        // if (playerCamScript == null)
+        // {
+        //     Debug.LogError("PlayerCameraSetup script is missing!");
+        // }
+        // else
+        // {
+        //     cam = playerCamScript.vCam.transform;
+        //     if(cam!=null)
+        //     {Debug.Log("Camera assigned to the player can move");}
+        //     else
+        //     {Debug.Log("Cam did not receive virtual camera");}
+        //     //cam = Camera.main.transform; // Now correctly assigns the main camera
+        // }
+
         cam = GameObject.Find("ThirdPersonFollowCam").transform;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if(!IsOwner) return;
+        if (!IsOwner) return;
 
         groundedPlayer = characterController.isGrounded;
 
@@ -41,50 +168,62 @@ public class PlayerControllerNetwork : NetworkBehaviour
         {
             playerVelocity.y = 0f; // Reset velocity when on the ground
         }
-        
-            Move();
-            PlayerJump();
 
-        playerVelocity.y += -gravityValue*Time.deltaTime;
-        characterController.Move(playerVelocity*Time.deltaTime);
-        }
+        Move();
+        PlayerJump();
 
+        playerVelocity.y += -gravityValue * Time.deltaTime;
+        characterController.Move(playerVelocity * Time.deltaTime);
+    }
 
     void Move()
     {
+        if (playerInput == null) return; // Ensure input is valid
+
         Vector2 inputVector = playerInput.actions["Move"].ReadValue<Vector2>();
         float verticalInput = inputVector.y;
         float horizontalInput = inputVector.x;
 
-        if(inputVector != Vector2.zero)
+        if (inputVector != Vector2.zero)
         {
-            Vector3 direction = (transform.forward*verticalInput + transform.right*horizontalInput).normalized;
+            Vector3 direction = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
 
-            if(direction.magnitude>0.1f)
+            if (direction.magnitude > 0.1f)
             {
-                float targetAngle = Mathf.Atan2(direction.x, direction.z)*Mathf.Rad2Deg + cam.eulerAngles.y;
-                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle,ref turnSmoothVelocity,turnSmoothTime);
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+                float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
-                Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f)*Vector3.forward;
-                characterController.Move(moveDirection*playerSpeed*Time.deltaTime);
-                anim.SetFloat("Move",Mathf.Clamp(moveDirection.magnitude,0f,1f));
-            }
+                Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+                characterController.Move(moveDirection * playerSpeed * Time.deltaTime);
 
+                if (anim != null)
+                {
+                    anim.SetFloat("Move", Mathf.Clamp(moveDirection.magnitude, 0f, 1f));
+                }
+            }
         }
         else
         {
-            anim.SetFloat("Move",0f);
+            if (anim != null)
+            {
+                anim.SetFloat("Move", 0f);
+            }
         }
     }
 
-void PlayerJump()
+    void PlayerJump()
     {
+        if (playerInput == null) return; // Ensure input is valid
+
         bool jumpPressed = playerInput.actions["Jump"].WasPerformedThisFrame();
-        if(jumpPressed && groundedPlayer)
+        if (jumpPressed && groundedPlayer)
         {
-            playerVelocity.y=Mathf.Sqrt(2f * gravityValue * jumpHeight);
-            anim.SetTrigger("Jump");
+            playerVelocity.y = Mathf.Sqrt(2f * gravityValue * jumpHeight);
+            if (anim != null)
+            {
+                anim.SetTrigger("Jump");
+            }
         }
     }
-    
 }
+
