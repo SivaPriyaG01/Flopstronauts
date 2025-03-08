@@ -86,11 +86,31 @@ public class NetworkManagerUI : MonoBehaviour
 
     private async void JoinRelay(string joinCode)
     {
+        // var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+        // var relayServerData = new RelayServerData(joinAllocation,"dtls");
+
+        // NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+        // NetworkManager.Singleton.StartClient();
+
+        if (!AuthenticationService.Instance.IsSignedIn)
+    {
+        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+    }
+
+    try
+    {
         var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-        var relayServerData = new RelayServerData(joinAllocation,"dtls");
+        var relayServerData = new RelayServerData(joinAllocation, "dtls");
 
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-        NetworkManager.Singleton.StartClient();
+        NetworkManager.Singleton.StartClient(); // Client automatically joins the correct scene
+
+        Debug.Log("Client successfully started!");
+    }
+    catch (RelayServiceException e)
+    {
+        Debug.LogError($"Failed to join relay: {e.Message}");
+    }
     }
 
     private void ExitGame()
@@ -100,8 +120,31 @@ public class NetworkManagerUI : MonoBehaviour
 
     private void EnterHostPlay()
     {
-        NetworkManager.Singleton.StartHost();
-        NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        // NetworkManager.Singleton.StartHost();
+        // NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+
+    //     if (NetworkManager.Singleton.IsHost)
+    // {
+    //     Debug.Log("Host detected. Loading GameScene...");
+    //     NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+    // }
+    // else
+    // {
+    //     Debug.LogError("EnterHostPlay called, but host is not running!");
+    // }
+
+        if (NetworkManager.Singleton.StartHost())
+        {
+            Debug.Log("Host started successfully. Loading GameScene...");
+            
+            // Step 4: Load the game scene using Netcode
+            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        }
+        else
+        {
+            Debug.LogError("Failed to start host!");
+        }
+
     }
 
     private void HostPanelInactive()
