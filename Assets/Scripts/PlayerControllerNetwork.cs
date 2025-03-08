@@ -104,7 +104,8 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private CharacterController characterController;
     private Animator anim;
     private Vector3 playerVelocity;
-    private Transform cam;
+    //private Transform cam;
+    private GameObject cam;
     private PlayerCameraSetup playerCamScript;
 
     [SerializeField] private float playerSpeed = 10f;
@@ -155,7 +156,8 @@ public class PlayerControllerNetwork : NetworkBehaviour
         //     //cam = Camera.main.transform; // Now correctly assigns the main camera
         // }
 
-        cam = GameObject.Find("ThirdPersonFollowCam").transform;
+        //cam = GameObject.Find("ThirdPersonFollowCam").transform;
+        cam = GameObject.FindWithTag("MainCamera");
     }
 
     void Update()
@@ -186,15 +188,15 @@ public class PlayerControllerNetwork : NetworkBehaviour
 
         if (inputVector != Vector2.zero)
         {
-            Vector3 direction = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
-
+            //Vector3 direction = (transform.forward * verticalInput + transform.right * horizontalInput).normalized;
+            Vector3 direction = new Vector3(horizontalInput,0,verticalInput).normalized;
             if (direction.magnitude > 0.1f)
             {
-                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.eulerAngles.y;
+                float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + cam.gameObject.transform.eulerAngles.y;
                 float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
                 transform.rotation = Quaternion.Euler(0f, angle, 0f);
                 Vector3 moveDirection = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-                characterController.Move(moveDirection * playerSpeed * Time.deltaTime);
+                characterController.Move(moveDirection.normalized * playerSpeed * Time.deltaTime);
 
                 if (anim != null)
                 {
