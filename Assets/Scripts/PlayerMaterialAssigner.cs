@@ -20,14 +20,14 @@ public class PlayerMaterialAssigner : MonoBehaviour
             {
                 PlayerPrefs.SetInt("SelectedMaterialIndex", index); // Store selected color
                 PlayerPrefs.Save();
-                SceneManager.LoadScene("GameScene"); // Load the next scene where the player spawns
+                //SceneManager.LoadScene("GameScene"); // Load the next scene where the player spawns
             });
         }
     }
 
-    public void GoToGameScene()
+    public void GoToMainMenuScene()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("MainMenu");
     }
     
 }

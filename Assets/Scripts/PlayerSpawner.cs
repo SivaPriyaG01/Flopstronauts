@@ -2,6 +2,8 @@ using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine.SceneManagement;
+
 
 public class PlayerSpawner : NetworkBehaviour
 {
@@ -21,22 +23,46 @@ public class PlayerSpawner : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        if (IsServer)
+         Debug.Log("PlayerSpawner: OnNetworkSpawn called.");
+         
+         if (IsServer)
+         {
+            Debug.Log("PlayerSpawner: Running on Server.");
+        // {
+        //     // Find the spawn area dynamically
+        //     GameObject spawnAreaObject = GameObject.Find("SpawnAreaCenter");
+
+        //     if (spawnAreaObject == null)
+        //     {
+        //         Debug.LogError("SpawnAreaCenter not found in the scene! Make sure it exists.");
+        //         return;
+        //     }
+
+        //     spawnAreaCenter = spawnAreaObject.transform;
+
+        //     GenerateRandomSpawnPositions(maxPlayers);
+        //     NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+        // }
+         
+
+        NetworkManager.Singleton.SceneManager.OnLoadComplete += (ulong clientId, string sceneName, LoadSceneMode loadMode) =>
         {
-            // Find the spawn area dynamically
-            GameObject spawnAreaObject = GameObject.Find("SpawnAreaCenter");
-
-            if (spawnAreaObject == null)
+            if (sceneName == "GameScene") // Ensure this only runs in the Game Scene
             {
-                Debug.LogError("SpawnAreaCenter not found in the scene! Make sure it exists.");
-                return;
+                GameObject spawnAreaObject = GameObject.Find("SpawnAreaCenter");
+
+                if (spawnAreaObject == null)
+                {
+                    Debug.LogError("SpawnAreaCenter not found in the scene! Make sure it exists.");
+                    return;
+                }
+
+                spawnAreaCenter = spawnAreaObject.transform;
+                GenerateRandomSpawnPositions(maxPlayers);
+                NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
             }
-
-            spawnAreaCenter = spawnAreaObject.transform;
-
-            GenerateRandomSpawnPositions(maxPlayers);
-            NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-        }
+        };
+    }
     }
 
     private void GenerateRandomSpawnPositions(int count)
