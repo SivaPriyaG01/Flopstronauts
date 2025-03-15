@@ -73,7 +73,7 @@ public class PlayerCameraSetup : NetworkBehaviour
 
     private void Start()
     {
-        if (!IsOwner) return; // Only assign camera for the local player
+        //if (!IsOwner) return; // Only assign camera for the local player
 
         AssignCamera();
     }
