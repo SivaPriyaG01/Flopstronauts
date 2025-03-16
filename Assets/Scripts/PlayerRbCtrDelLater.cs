@@ -54,7 +54,7 @@ public class PlayerRbCtrDelLater : MonoBehaviour
             Vector3 moveDirection = Quaternion.Euler(0f,angle,0f)*Vector3.forward;
 
             rb.MoveRotation(Quaternion.Euler(0f,angle,0f));
-            rb.MovePosition(rb.position+moveDirection*playerSpeed*Time.deltaTime);
+            rb.MovePosition(rb.position+moveDirection*playerSpeed);
             anim.SetFloat("Move",Mathf.Clamp(moveDirection.magnitude, 0f, 1f));
         }
         }
