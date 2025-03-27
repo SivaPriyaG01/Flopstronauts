@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
 {
     private static AudioManager instance;
     [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip inGameMusic, outGameMusic; 
+    [SerializeField] AudioClip inGameMusic, outGameMusic, buttonClickSound; 
     void Awake()
     {
         if (instance != null)
@@ -37,5 +38,22 @@ public class AudioManager : MonoBehaviour
             audioSource.clip = newClip;
             audioSource.Play();
         }
+
+        AssignButtonClickSounds();
+    }
+
+    void AssignButtonClickSounds()
+    {
+        Button[] buttons = FindObjectsOfType<Button>(); // Find all buttons in the scene
+
+        foreach (Button btn in buttons)
+        {
+            btn.onClick.AddListener(PlayButtonClickSound);
+        }
+    }
+
+    void PlayButtonClickSound()
+    {
+        audioSource.PlayOneShot(buttonClickSound);
     }
 }

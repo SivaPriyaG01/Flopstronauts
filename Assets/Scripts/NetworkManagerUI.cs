@@ -86,12 +86,6 @@ public class NetworkManagerUI : MonoBehaviour
 
     private async void JoinRelay(string joinCode)
     {
-        // var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
-        // var relayServerData = new RelayServerData(joinAllocation,"dtls");
-
-        // NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-        // NetworkManager.Singleton.StartClient();
-
         if (!AuthenticationService.Instance.IsSignedIn)
     {
         await AuthenticationService.Instance.SignInAnonymouslyAsync();
@@ -120,19 +114,6 @@ public class NetworkManagerUI : MonoBehaviour
 
     private void EnterHostPlay()
     {
-        // NetworkManager.Singleton.StartHost();
-        // NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-
-    //     if (NetworkManager.Singleton.IsHost)
-    // {
-    //     Debug.Log("Host detected. Loading GameScene...");
-    //     NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
-    // }
-    // else
-    // {
-    //     Debug.LogError("EnterHostPlay called, but host is not running!");
-    // }
-
         if (NetworkManager.Singleton.StartHost())
         {
             Debug.Log("Host started successfully. Loading GameScene...");
