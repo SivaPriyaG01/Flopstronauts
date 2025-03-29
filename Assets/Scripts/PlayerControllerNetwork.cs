@@ -11,6 +11,8 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private Animator anim;
     private Vector3 playerVelocity;
     private GameObject cam;
+    private AudioSource audio;
+    [SerializeField] AudioClip onCollisionClip;
     [SerializeField] private float playerSpeed = 10f;
     [SerializeField] private float jumpHeight = 7f;
     [SerializeField] private float rotationSpeed = 100f;
@@ -44,6 +46,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
         }
 
         cam = GameObject.FindWithTag("MainCamera");
+        audio = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -111,6 +114,15 @@ public class PlayerControllerNetwork : NetworkBehaviour
             {
                 anim.SetTrigger("Jump");
             }
+        }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Obstacle"))
+        {
+            audio.clip=onCollisionClip;
+            audio.Play();
         }
     }
 }
