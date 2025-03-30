@@ -25,7 +25,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
     void Start()
     {
         // Ensure ownership check before assigning variables
-        //if (!IsOwner) return;
+        if (!IsOwner) return;
 
         playerInput = GetComponent<PlayerInput>();
         if (playerInput == null)
@@ -51,7 +51,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
 
     void Update()
     {
-        //if (!IsOwner) return;
+        if (!IsOwner) return;
 
         groundedPlayer = characterController.isGrounded;
 

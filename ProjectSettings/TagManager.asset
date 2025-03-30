@@ -9,6 +9,7 @@ TagManager:
   - FinishLine
   - VirtualCamera
   - Messages
+  - Obstacle
   layers:
   - Default
   - TransparentFX
