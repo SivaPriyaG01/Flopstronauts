@@ -117,12 +117,11 @@ public class PlayerControllerNetwork : NetworkBehaviour
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if(collision.gameObject.CompareTag("Obstacle"))
+        if(hit.gameObject.CompareTag("Obstacle"))
         {
-            audio.clip=onCollisionClip;
-            audio.Play();
+            audio.PlayOneShot(onCollisionClip);
         }
     }
 }
