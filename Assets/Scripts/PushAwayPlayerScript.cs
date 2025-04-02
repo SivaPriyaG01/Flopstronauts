@@ -36,6 +36,10 @@ public class PushAwayPlayerScript : MonoBehaviour
     {
         switch (obstacle)
         {
+            case "Blade":
+            return transform.forward;
+            case "Spikes":
+            return transform.up;
             default:
             return transform.up;
         }
