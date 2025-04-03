@@ -19,7 +19,7 @@ public class PushAwayPlayerScript : MonoBehaviour
 
     private IEnumerator PushPlayer(CharacterController playerController, Transform hitTransform)
     {
-        Vector3 pushDirection = PushDirectionByObstacle(gameObject.tag); // Direction away from blade
+        Vector3 pushDirection = transform.forward; // Direction away from blade
         // pushDirection.y = 0; // Keep the force horizontal
         // pushDirection.Normalize();
 
@@ -32,16 +32,16 @@ public class PushAwayPlayerScript : MonoBehaviour
         }
     }
 
-    Vector3 PushDirectionByObstacle(string obstacle)
-    {
-        switch (obstacle)
-        {
-            case "Blade":
-            return transform.forward;
-            case "Spikes":
-            return transform.up;
-            default:
-            return transform.up;
-        }
-    }
+    // Vector3 PushDirectionByObstacle(string obstacle)
+    // {
+    //     switch (obstacle)
+    //     {
+    //         case "Blade":
+    //         return transform.forward;
+    //         case "Spikes":
+    //         return transform.up;
+    //         default:
+    //         return transform.up;
+    //     }
+    // }
 }
