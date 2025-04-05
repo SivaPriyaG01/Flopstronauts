@@ -6,6 +6,7 @@ public class PushAwayPlayerScript : MonoBehaviour
 {
     [SerializeField] private float pushForce = 10f; // Strength of push
     [SerializeField] private float pushDuration = 0.2f; // How long the push effect lasts
+    AudioManager audioManager;
 
     private void OnTriggerStay(Collider other)
     {
@@ -30,6 +31,11 @@ public class PushAwayPlayerScript : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        audioManager.PlayOnCollision();
     }
 
     // Vector3 PushDirectionByObstacle(string obstacle)

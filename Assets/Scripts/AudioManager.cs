@@ -9,7 +9,7 @@ public class AudioManager : MonoBehaviour
 {
     private static AudioManager instance;
     [SerializeField] AudioSource audioSource;
-    [SerializeField] AudioClip inGameMusic, outGameMusic, buttonClickSound; 
+    [SerializeField] AudioClip inGameMusic, outGameMusic, buttonClickSound,onCollisionMusic; 
     void Awake()
     {
         if (instance != null)
@@ -55,5 +55,10 @@ public class AudioManager : MonoBehaviour
     void PlayButtonClickSound()
     {
         audioSource.PlayOneShot(buttonClickSound);
+    }
+
+    public void PlayOnCollision()
+    {
+        audioSource.PlayOneShot(onCollisionMusic);
     }
 }
