@@ -17,6 +17,7 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private Button hostButton;
     [SerializeField] private Button clientButton;
     [SerializeField] private Button exitButton;
+    [SerializeField] private Button settingsButton;
     [SerializeField] private Button generateCodeButton;
     [SerializeField] private Button hostPlayButton;
     [SerializeField] private Button clientPlayButton;
@@ -25,6 +26,7 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private Button playerColorChooseScene;
     [SerializeField] private GameObject hostPanel;
     [SerializeField] private GameObject joinPanel;
+    [SerializeField] private GameObject SettingsPanel;
     [SerializeField] private TMP_InputField joinInput;
     [SerializeField] private TextMeshProUGUI codeText;
 
@@ -56,10 +58,12 @@ public class NetworkManagerUI : MonoBehaviour
 
         hostPanel.SetActive(false);
         joinPanel.SetActive(false);
+        SettingsPanel.SetActive(false);
 
         hostButton.onClick.AddListener(HostPanelActive);
         clientButton.onClick.AddListener(JoinPanelActive);
         exitButton.onClick.AddListener(ExitGame);
+        settingsButton.onClick.AddListener(SettingsPanelActive);
     
         generateCodeButton.onClick.AddListener(CreateRelay);
         hostPlayButton.onClick.AddListener(EnterHostPlay);
@@ -149,5 +153,10 @@ public class NetworkManagerUI : MonoBehaviour
     private void LoadPlayerColorChooseScene()
     {
         SceneManager.LoadScene("ChoosePlayerColor");
+    }
+
+    private void SettingsPanelActive()
+    {
+        SettingsPanel.SetActive(false);
     }
 }
