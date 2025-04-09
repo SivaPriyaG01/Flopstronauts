@@ -23,6 +23,7 @@ public class NetworkManagerUI : MonoBehaviour
     [SerializeField] private Button clientPlayButton;
     [SerializeField] private Button cancelHostPanelButton;
     [SerializeField] private Button cancelJoinPanelButton;
+    [SerializeField] private Button cancelSettingsPanelButton;
     [SerializeField] private Button playerColorChooseScene;
     [SerializeField] private GameObject hostPanel;
     [SerializeField] private GameObject joinPanel;
@@ -70,6 +71,7 @@ public class NetworkManagerUI : MonoBehaviour
         clientPlayButton.onClick.AddListener(() => JoinRelay(joinInput.text));
         cancelHostPanelButton.onClick.AddListener(HostPanelInactive);
         cancelJoinPanelButton.onClick.AddListener(JoinPanelInactive);
+        cancelSettingsPanelButton.onClick.AddListener(SettingsPanelInactive);
 
         playerColorChooseScene.onClick.AddListener(LoadPlayerColorChooseScene);
     }
@@ -150,6 +152,11 @@ public class NetworkManagerUI : MonoBehaviour
         joinPanel.SetActive(false);
     }
 
+    private void SettingsPanelInactive()
+    {
+        SettingsPanel.SetActive(false);
+    }
+
     private void LoadPlayerColorChooseScene()
     {
         SceneManager.LoadScene("ChoosePlayerColor");
@@ -157,6 +164,6 @@ public class NetworkManagerUI : MonoBehaviour
 
     private void SettingsPanelActive()
     {
-        SettingsPanel.SetActive(false);
+        SettingsPanel.SetActive(true);
     }
 }

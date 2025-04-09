@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -8,6 +9,7 @@ using UnityEngine.UI;
 public class AudioManager : MonoBehaviour
 {
     private static AudioManager instance;
+    [SerializeField] Slider audioSlider;
     [SerializeField] AudioSource audioSource;
     [SerializeField] AudioClip inGameMusic, outGameMusic, buttonClickSound,onCollisionMusic; 
     void Awake()
@@ -61,4 +63,10 @@ public class AudioManager : MonoBehaviour
     {
         audioSource.PlayOneShot(onCollisionMusic);
     }
+
+    public void OnAudioSettingsChange()
+    {
+        audioSource.volume=audioSlider.value;
+    }
+
 }
