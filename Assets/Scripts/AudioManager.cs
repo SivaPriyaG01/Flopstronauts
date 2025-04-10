@@ -67,6 +67,7 @@ public class AudioManager : MonoBehaviour
     public void OnAudioSettingsChange()
     {
         audioSource.volume=audioSlider.value;
+        PlayerPrefs.SetFloat("gameVolume",audioSlider.value);
     }
 
 }

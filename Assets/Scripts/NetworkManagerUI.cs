@@ -103,8 +103,7 @@ public class NetworkManagerUI : MonoBehaviour
         var relayServerData = new RelayServerData(joinAllocation, "dtls");
 
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
-        NetworkManager.Singleton.StartClient(); // Client automatically joins the correct scene
-
+        NetworkManager.Singleton.StartClient(); 
         Debug.Log("Client successfully started!");
     }
     catch (RelayServiceException e)
