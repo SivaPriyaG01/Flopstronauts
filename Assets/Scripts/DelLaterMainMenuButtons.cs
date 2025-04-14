@@ -10,9 +10,12 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class DelLaterMainMenuButtons : NetworkBehaviour
 {
+    [SerializeField] int maxConnections;
+    [SerializeField] TMP_Text code;
     // Start is called before the first frame update
     async void Start()
     {
@@ -36,5 +39,21 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
     public void OnExitButtonClick()
     {
         Application.Quit();
+    }
+
+    public async void CreateRelay()
+    {
+        Allocation allocation = await RelayService.Instance.CreateAllocationAsync(maxConnections);
+        string joinCode = await RelayService.Instance.GetJoinCodeAsync(allocation.AllocationId);
+
+        code.text = "Code: "+joinCode;
+
+        var relayServerData = new RelayServerData(allocation,"dtls");
+        NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+    }
+
+    public async void JoinRelay()
+    {
+
     }
 }
