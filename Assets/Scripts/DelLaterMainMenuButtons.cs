@@ -16,6 +16,7 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
 {
     [SerializeField] int maxConnections;
     [SerializeField] TMP_Text code;
+    [SerializeField] TMP_InputField joinCode;
     // Start is called before the first frame update
     async void Start()
     {
@@ -52,8 +53,24 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
         NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
     }
 
-    public async void JoinRelay()
+    public async void JoinRelay(string joinCode)
     {
+        if(!AuthenticationService.Instance.IsSignedIn)
+        {
+            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        }
 
+        try
+        {
+            var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
+            var relayServerData = new RelayServerData(joinAllocation,"dtls");
+
+            NetworkManager.Singleton.GetComponent<UnityTransport>().SetRelayServerData(relayServerData);
+            NetworkManager.Singleton.StartClient();
+        }
+        catch(RelayServiceException e)
+        {
+            Debug.Log(e);
+        }
     }
 }
