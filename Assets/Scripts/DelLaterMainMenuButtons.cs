@@ -73,4 +73,21 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
             Debug.Log(e);
         }
     }
+
+    public void EnterHostPlay()
+    {
+        if (NetworkManager.Singleton.StartHost())
+        {
+            Debug.Log("Host started successfully. Loading GameScene...");
+            
+            // Step 4: Load the game scene using Netcode
+            NetworkManager.Singleton.SceneManager.LoadScene("GameScene", LoadSceneMode.Single);
+        }
+        else
+        {
+            Debug.LogError("Failed to start host!");
+        }
+
+    }
+
 }
