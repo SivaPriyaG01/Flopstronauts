@@ -17,6 +17,8 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
     [SerializeField] int maxConnections;
     [SerializeField] TMP_Text code;
     [SerializeField] TMP_InputField joinCode;
+    [SerializeField] GameObject hostPanel;
+    [SerializeField] GameObject joinPanel;
     // Start is called before the first frame update
     async void Start()
     {
@@ -33,6 +35,9 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
                 Debug.Log(e);
             }
         }
+
+        hostPanel.SetActive(false);
+        joinPanel.SetActive(false);
     }
 
     // Update is called once per frame
