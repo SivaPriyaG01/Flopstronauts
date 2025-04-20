@@ -59,9 +59,11 @@ public class LoginSignUpScript : MonoBehaviour
         };
     }
 
-    public async void Start()
+    public void Start()
     {
         SignUpPanel.SetActive(false);
+        registerButton.onClick.AddListener(()=> OnRegisterClicked(registerUsernameField.ToString(),registerPasswordField.ToString()));
+        loginButton.onClick.AddListener(()=> OnLoginClicked(loginUsernameField.ToString(),loginPasswordField.ToString()));
     }
 
     // Update is called once per frame
