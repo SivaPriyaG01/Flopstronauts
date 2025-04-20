@@ -13,9 +13,9 @@ public class LoginSignUpScript : MonoBehaviour
 {
     [SerializeField] Button loginButton;
     [SerializeField] Button registerButton;
-    [SerializeField] TMP_InputField loginEmailField;
+    [SerializeField] TMP_InputField loginUsernameField;
     [SerializeField] TMP_InputField loginPasswordField;
-    [SerializeField] TMP_InputField registerEmailField;
+    [SerializeField] TMP_InputField registerUsernameField;
     [SerializeField] TMP_InputField registerPasswordField;
     [SerializeField] GameObject SignUpPanel;
     // Start is called before the first frame update
@@ -66,8 +66,9 @@ public class LoginSignUpScript : MonoBehaviour
 
     // Update is called once per frame
     
-    public void OnLoginClicked()
+    public async void OnLoginClicked(string username, string password)
     {
+        await SignInWithUsernamePasswordAsync(username, password);
         SceneManager.LoadScene("NewMainMenuScene");
     }
 
@@ -96,4 +97,25 @@ public class LoginSignUpScript : MonoBehaviour
         Debug.LogException(ex);
     }
     }
+
+    async Task SignInWithUsernamePasswordAsync(string username, string password)
+{
+    try
+    {
+        await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(username, password);
+        Debug.Log("SignIn is successful.");
+    }
+    catch (AuthenticationException ex)
+    {
+        // Compare error code to AuthenticationErrorCodes
+        // Notify the player with the proper error message
+        Debug.LogException(ex);
+    }
+    catch (RequestFailedException ex)
+    {
+        // Compare error code to CommonErrorCodes
+        // Notify the player with the proper error message
+        Debug.LogException(ex);
+    }
+}
 }
