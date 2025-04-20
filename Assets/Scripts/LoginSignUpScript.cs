@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using Unity.Services.Core;
 using System;
 using Unity.Services.Authentication;
+using System.Threading.Tasks;
 
 public class LoginSignUpScript : MonoBehaviour
 {
@@ -70,9 +71,29 @@ public class LoginSignUpScript : MonoBehaviour
         SceneManager.LoadScene("NewMainMenuScene");
     }
 
-    public void OnRegisterClicked()
+    public async void OnRegisterClicked(string username, string password)
     {
-        
+        await SignUpWithUsernamePasswordAsync(username, password);
     }
 
+    async Task SignUpWithUsernamePasswordAsync(string username, string password)
+    {
+    try
+    {
+        await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
+        Debug.Log("SignUp is successful.");
+    }
+    catch (AuthenticationException ex)
+    {
+        // Compare error code to AuthenticationErrorCodes
+        // Notify the player with the proper error message
+        Debug.LogException(ex);
+    }
+    catch (RequestFailedException ex)
+    {
+        // Compare error code to CommonErrorCodes
+        // Notify the player with the proper error message
+        Debug.LogException(ex);
+    }
+    }
 }
