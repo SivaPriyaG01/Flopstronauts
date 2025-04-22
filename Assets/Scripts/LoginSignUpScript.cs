@@ -18,6 +18,7 @@ public class LoginSignUpScript : MonoBehaviour
     [SerializeField] TMP_InputField registerUsernameField;
     [SerializeField] TMP_InputField registerPasswordField;
     [SerializeField] GameObject SignUpPanel;
+    [SerializeField] TMP_Text messages;
     // Start is called before the first frame update
     
     async void Awake()
@@ -62,8 +63,9 @@ public class LoginSignUpScript : MonoBehaviour
     public void Start()
     {
         SignUpPanel.SetActive(false);
-        registerButton.onClick.AddListener(()=> OnRegisterClicked(registerUsernameField.ToString(),registerPasswordField.ToString()));
-        loginButton.onClick.AddListener(()=> OnLoginClicked(loginUsernameField.ToString(),loginPasswordField.ToString()));
+        //SetupEvents();
+        registerButton.onClick.AddListener(()=> OnRegisterClicked(registerUsernameField.text,registerPasswordField.text));
+        loginButton.onClick.AddListener(()=> OnLoginClicked(loginUsernameField.text,loginPasswordField.text));
     }
 
     // Update is called once per frame
@@ -91,6 +93,7 @@ public class LoginSignUpScript : MonoBehaviour
         // Compare error code to AuthenticationErrorCodes
         // Notify the player with the proper error message
         Debug.LogException(ex);
+        messages.text = "Exception occures";
     }
     catch (RequestFailedException ex)
     {
@@ -112,6 +115,7 @@ public class LoginSignUpScript : MonoBehaviour
         // Compare error code to AuthenticationErrorCodes
         // Notify the player with the proper error message
         Debug.LogException(ex);
+        messages.text = ex.ToString();
     }
     catch (RequestFailedException ex)
     {
