@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
+using Unity.Collections;
+using TMPro;
 
 public class PlayerControllerNetwork : NetworkBehaviour
 {
@@ -12,6 +14,7 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private Vector3 playerVelocity;
     private GameObject cam;
     private AudioSource audio;
+    private TMP_Text playerNameDisplay;
     [SerializeField] AudioClip onCollisionClip;
     [SerializeField] private float playerSpeed = 10f;
     [SerializeField] private float jumpHeight = 7f;
@@ -21,6 +24,10 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private bool groundedPlayer;
     private float turnSmoothVelocity;
     private float turnSmoothTime = 0.2f;
+
+    public NetworkVariable<FixedString64Bytes> PlayerName = new NetworkVariable<FixedString64Bytes>(
+    writePerm: NetworkVariableWritePermission.Owner);
+
 
     void Start()
     {
@@ -47,6 +54,9 @@ public class PlayerControllerNetwork : NetworkBehaviour
 
         cam = GameObject.FindWithTag("MainCamera");
         audio = GetComponent<AudioSource>();
+
+        PlayerName.Value = LoginSignUpScript.PlayerSession.Username;
+        playerNameDisplay.text=PlayerName.Value.ToString();
     }
 
     void Update()

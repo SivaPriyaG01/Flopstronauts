@@ -21,6 +21,11 @@ public class LoginSignUpScript : MonoBehaviour
     [SerializeField] TMP_Text messages;
     // Start is called before the first frame update
     
+    public static class PlayerSession
+{
+    public static string Username;
+}
+    
     async void Awake()
 	{
 		try
@@ -73,6 +78,7 @@ public class LoginSignUpScript : MonoBehaviour
     public async void OnLoginClicked(string username, string password)
     {
         await SignInWithUsernamePasswordAsync(username, password);
+        PlayerSession.Username = username;
         SceneManager.LoadScene("NewMainMenuScene");
     }
 
