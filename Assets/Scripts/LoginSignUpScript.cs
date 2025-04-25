@@ -24,6 +24,7 @@ public class LoginSignUpScript : MonoBehaviour
     public static class PlayerSession
 {
     public static string Username;
+    public static string Password;
 }
     
     async void Awake()
@@ -79,6 +80,7 @@ public class LoginSignUpScript : MonoBehaviour
     {
         await SignInWithUsernamePasswordAsync(username, password);
         PlayerSession.Username = username;
+        PlayerSession.Password=password;
         SceneManager.LoadScene("NewMainMenuScene");
     }
 
