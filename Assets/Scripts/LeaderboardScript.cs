@@ -17,19 +17,25 @@ public class LeaderboardScript : MonoBehaviour
     int RangeLimit { get; set; }
     List<string> FriendIds { get; set; }
 
+    IAuthenticationService authService;
+
     async void Awake()
     {
         await UnityServices.InitializeAsync();
 
-        await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(LoginSignUpScript.PlayerSession.Username,LoginSignUpScript.PlayerSession.Password);
+        // await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(LoginSignUpScript.PlayerSession.Username,LoginSignUpScript.PlayerSession.Password);
     }
 
     public async void AddScore(int score,string leaderboardId=LeaderboardId)
     {
-        var playerEntry = await LeaderboardsService.Instance
+        if(authService.IsSignedIn)
+        {
+            var playerEntry = await LeaderboardsService.Instance
             .AddPlayerScoreAsync(leaderboardId, score);
-        Debug.Log(JsonConvert.SerializeObject(playerEntry));
+            Debug.Log(JsonConvert.SerializeObject(playerEntry));
     }
+        }
+        
 
     public async void GetPlayerScore(string leaderboardId=LeaderboardId)
     {
