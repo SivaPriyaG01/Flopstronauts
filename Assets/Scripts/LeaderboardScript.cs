@@ -19,9 +19,11 @@ public class LeaderboardScript : MonoBehaviour
 
     IAuthenticationService authService;
 
+    
     async void Awake()
     {
         await UnityServices.InitializeAsync();
+        authService = AuthenticationService.Instance;
 
         // await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(LoginSignUpScript.PlayerSession.Username,LoginSignUpScript.PlayerSession.Password);
     }
