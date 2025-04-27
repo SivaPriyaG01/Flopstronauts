@@ -39,9 +39,13 @@ public class LeaderboardScript : MonoBehaviour
 
     public async void GetPlayerScore(string leaderboardId=LeaderboardId)
     {
-        var scoreResponse = await LeaderboardsService.Instance
+        if(authService.IsSignedIn)
+        {
+            var scoreResponse = await LeaderboardsService.Instance
             .GetPlayerScoreAsync(leaderboardId);
-        Debug.Log(JsonConvert.SerializeObject(scoreResponse));
+            Debug.Log(JsonConvert.SerializeObject(scoreResponse));
+        }
+        
     }
 
     public async void GetPlayerRange(string leaderboardId=LeaderboardId)
