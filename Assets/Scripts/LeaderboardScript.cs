@@ -8,7 +8,6 @@ using UnityEngine;
 
 public class LeaderboardScript : MonoBehaviour
 {
-    // Create a leaderboard with this ID in the Unity Cloud Dashboard
     const string LeaderboardId = "FlopstronautsLB";
 
     string VersionId { get; set; }
