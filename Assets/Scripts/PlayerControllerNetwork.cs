@@ -25,8 +25,8 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private float turnSmoothVelocity;
     private float turnSmoothTime = 0.2f;
 
-    public NetworkVariable<FixedString64Bytes> PlayerName = new NetworkVariable<FixedString64Bytes>(
-    writePerm: NetworkVariableWritePermission.Owner);
+    // public NetworkVariable<FixedString64Bytes> PlayerName = new NetworkVariable<FixedString64Bytes>(
+    // writePerm: NetworkVariableWritePermission.Owner);
 
 
     void Start()
@@ -55,8 +55,8 @@ public class PlayerControllerNetwork : NetworkBehaviour
         cam = GameObject.FindWithTag("MainCamera");
         audio = GetComponent<AudioSource>();
 
-        PlayerName.Value = LoginSignUpScript.PlayerSession.Username;
-        playerNameDisplay.text=PlayerName.Value.ToString();
+        // PlayerName.Value = LoginSignUpScript.PlayerSession.Username;
+        // playerNameDisplay.text=PlayerName.Value.ToString();
     }
 
     void Update()

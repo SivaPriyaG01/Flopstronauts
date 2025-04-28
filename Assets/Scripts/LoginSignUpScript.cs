@@ -81,7 +81,16 @@ public class LoginSignUpScript : MonoBehaviour
         await SignInWithUsernamePasswordAsync(username, password);
         PlayerSession.Username = username;
         PlayerSession.Password=password;
-        SceneManager.LoadScene("NewMainMenuScene");
+
+        if(AuthenticationService.Instance.IsSignedIn)
+        {
+            SceneManager.LoadScene("NewMainMenuScene");
+        }
+        else
+        {
+            messages.text="Please Sign In";
+        }
+        
     }
 
     public async void OnRegisterClicked(string username, string password)

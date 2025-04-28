@@ -43,7 +43,8 @@ public class NetworkManagerUI : MonoBehaviour
         {
             try
             {
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                //await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(LoginSignUpScript.PlayerSession.Username,LoginSignUpScript.PlayerSession.Password);
                 Debug.Log($"Player signed in: {AuthenticationService.Instance.PlayerId}");
             }
             catch (AuthenticationException e)
@@ -94,7 +95,7 @@ public class NetworkManagerUI : MonoBehaviour
     {
         if (!AuthenticationService.Instance.IsSignedIn)
     {
-        await AuthenticationService.Instance.SignInAnonymouslyAsync();
+        await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(LoginSignUpScript.PlayerSession.Username,LoginSignUpScript.PlayerSession.Password);
     }
 
     try
