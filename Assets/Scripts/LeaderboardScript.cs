@@ -136,4 +136,12 @@ public class LeaderboardScript : MonoBehaviour
     //     );
     //     Debug.Log(JsonConvert.SerializeObject(scoresResponse));
     // }
+
+    void FuntionForLeaderoard()
+    {
+        // Fectch from Firebase
+        //fetch from leaderboard
+        //compare playerid
+        //display
+    }
 }
