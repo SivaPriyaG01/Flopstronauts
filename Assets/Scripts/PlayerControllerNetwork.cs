@@ -13,8 +13,8 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private Animator anim;
     private Vector3 playerVelocity;
     private GameObject cam;
-    private AudioSource audio;
-    private TMP_Text playerNameDisplay;
+    //private TMP_Text playerNameDisplay;
+    private bool isCollided=false;
     [SerializeField] AudioClip onCollisionClip;
     [SerializeField] private float playerSpeed = 10f;
     [SerializeField] private float jumpHeight = 7f;
@@ -53,7 +53,6 @@ public class PlayerControllerNetwork : NetworkBehaviour
         }
 
         cam = GameObject.FindWithTag("MainCamera");
-        audio = GetComponent<AudioSource>();
 
         // PlayerName.Value = LoginSignUpScript.PlayerSession.Username;
         // playerNameDisplay.text=PlayerName.Value.ToString();
@@ -126,14 +125,6 @@ public class PlayerControllerNetwork : NetworkBehaviour
             }
         }
     }
-
-    // private void OnTriggerEnter(Collider other) 
-    // {
-    //     if(other.gameObject.CompareTag("Obstacle"))
-    //     {
-    //         audio.PlayOneShot(onCollisionClip);
-    //     }    
-    // }
     
 }
 
