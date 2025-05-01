@@ -13,8 +13,6 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private Animator anim;
     private Vector3 playerVelocity;
     private GameObject cam;
-    //private TMP_Text playerNameDisplay;
-    private bool isCollided=false;
     [SerializeField] AudioClip onCollisionClip;
     [SerializeField] private float playerSpeed = 10f;
     [SerializeField] private float jumpHeight = 7f;
@@ -24,10 +22,6 @@ public class PlayerControllerNetwork : NetworkBehaviour
     private bool groundedPlayer;
     private float turnSmoothVelocity;
     private float turnSmoothTime = 0.2f;
-
-    // public NetworkVariable<FixedString64Bytes> PlayerName = new NetworkVariable<FixedString64Bytes>(
-    // writePerm: NetworkVariableWritePermission.Owner);
-
 
     void Start()
     {
@@ -53,9 +47,6 @@ public class PlayerControllerNetwork : NetworkBehaviour
         }
 
         cam = GameObject.FindWithTag("MainCamera");
-
-        // PlayerName.Value = LoginSignUpScript.PlayerSession.Username;
-        // playerNameDisplay.text=PlayerName.Value.ToString();
     }
 
     void Update()
