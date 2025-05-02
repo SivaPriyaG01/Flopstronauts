@@ -7,18 +7,23 @@ using TMPro;
 
 public class PlayerUsernameDisplay : NetworkBehaviour
 {
-    NetworkVariable<FixedString64Bytes> displayName = new NetworkVariable<FixedString64Bytes>(LoginSignUpScript.PlayerSession.Username);
+    NetworkVariable<FixedString64Bytes> displayName = new NetworkVariable<FixedString64Bytes>();
     [SerializeField] TMP_Text playerNameDisplayText;
     // Start is called before the first frame update
     void Start()
     {
         if(!IsOwner) return;
-        playerNameDisplayText.text=displayName.ToString();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
+        if(LoginSignUpScript.PlayerSession.Username!=null)
+        {
+            displayName.Value=new FixedString64Bytes(LoginSignUpScript.PlayerSession.Username);
+            playerNameDisplayText.text=displayName.ToString();
+        }
+        else
+        {
+            Debug.LogWarning("PlayerSession.Username is null");
+            playerNameDisplayText.text="Unknown";
+        }
         
     }
 }

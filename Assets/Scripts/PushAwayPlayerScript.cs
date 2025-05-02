@@ -33,10 +33,10 @@ public class PushAwayPlayerScript : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        audioManager.PlayOnCollision();
-    }
+    // void OnTriggerEnter(Collider other)
+    // {
+    //     audioManager.PlayOnCollision();
+    // }
 
     // Vector3 PushDirectionByObstacle(string obstacle)
     // {
