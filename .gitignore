@@ -192,4 +192,7 @@ Assets/StreamingAssets.meta
 /Assets/Firebase/**/*.so
 /Assets/Firebase/**/*.framework
 /Assets/Firebase/**/*.bundle
+/Assets/ExternalDependencyManager/
+/Assets/Firebase/
+/Assets/Plugins/
 /Assets/StreamingAssets/google-services-desktop.json
