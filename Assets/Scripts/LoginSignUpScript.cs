@@ -19,6 +19,7 @@ public class LoginSignUpScript : MonoBehaviour
     [SerializeField] TMP_InputField registerPasswordField;
     [SerializeField] GameObject SignUpPanel;
     [SerializeField] TMP_Text messages;
+
     // Start is called before the first frame update
     
     public static class PlayerSession
