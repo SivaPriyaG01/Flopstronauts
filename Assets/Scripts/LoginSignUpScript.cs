@@ -26,6 +26,19 @@ public class LoginSignUpScript : MonoBehaviour
 {
     public static string Username;
     public static string Password;
+    //public static string PlayerID;
+}
+    public class User {
+    public string username;
+    public string playerID;
+
+    public User() {
+    }
+
+    public User(string username, string playerID) {
+        this.username = username;
+        this.playerID = playerID;
+    }
 }
     
     async void Awake()
@@ -38,6 +51,7 @@ public class LoginSignUpScript : MonoBehaviour
 		{
 			Debug.LogException(e);
 		}
+        SetupEvents();
 	}
 
 
@@ -104,6 +118,7 @@ public class LoginSignUpScript : MonoBehaviour
     try
     {
         await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
+        //PlayerSession.PlayerID=AuthenticationService.Instance.PlayerId;
         Debug.Log("SignUp is successful.");
     }
     catch (AuthenticationException ex)
@@ -141,5 +156,6 @@ public class LoginSignUpScript : MonoBehaviour
         // Notify the player with the proper error message
         Debug.LogException(ex);
     }
+
 }
 }
