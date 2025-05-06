@@ -19,6 +19,7 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
     [SerializeField] TMP_InputField joinCode;
     [SerializeField] GameObject hostPanel;
     [SerializeField] GameObject joinPanel;
+    [SerializeField] Button joinRelayButton;
     // Start is called before the first frame update
     async void Start()
     {
@@ -28,7 +29,7 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
         {
             try
             {
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(LoginSignUpScript.PlayerSession.Username,LoginSignUpScript.PlayerSession.Password);
             }
             catch(AuthenticationException e)
             {
@@ -38,6 +39,7 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
 
         hostPanel.SetActive(false);
         joinPanel.SetActive(false);
+        joinRelayButton.onClick.AddListener(()=>JoinRelay(joinCode.text));
     }
 
     // Update is called once per frame
@@ -62,7 +64,7 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
     {
         if(!AuthenticationService.Instance.IsSignedIn)
         {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            await AuthenticationService.Instance.SignInWithUsernamePasswordAsync(LoginSignUpScript.PlayerSession.Username,LoginSignUpScript.PlayerSession.Password);
         }
 
         try
