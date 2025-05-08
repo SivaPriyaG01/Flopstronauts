@@ -20,6 +20,7 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
     [SerializeField] GameObject hostPanel;
     [SerializeField] GameObject joinPanel;
     [SerializeField] Button joinRelayButton;
+    [SerializeField] TMP_Text usernameDisplayText;
     // Start is called before the first frame update
     async void Start()
     {
@@ -40,6 +41,7 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
         hostPanel.SetActive(false);
         joinPanel.SetActive(false);
         joinRelayButton.onClick.AddListener(()=>JoinRelay(joinCode.text));
+        usernameDisplayText="User: "+LoginSignUpScript.PlayerSession.Username.text;
     }
 
     // Update is called once per frame
