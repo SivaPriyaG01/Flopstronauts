@@ -41,7 +41,7 @@ public class DelLaterMainMenuButtons : NetworkBehaviour
         hostPanel.SetActive(false);
         joinPanel.SetActive(false);
         joinRelayButton.onClick.AddListener(()=>JoinRelay(joinCode.text));
-        usernameDisplayText="User: "+LoginSignUpScript.PlayerSession.Username.text;
+        usernameDisplayText.text="User: "+LoginSignUpScript.PlayerSession.Username;
     }
 
     // Update is called once per frame
