@@ -17,7 +17,7 @@ public class PlayerUsernameDisplay : NetworkBehaviour
         if(LoginSignUpScript.PlayerSession.Username!=null)
         {
             displayName.Value=new FixedString64Bytes(LoginSignUpScript.PlayerSession.Username);
-            playerNameDisplayText.text=displayName.ToString();
+            playerNameDisplayText.text=displayName.Value.ToString();
         }
         else
         {
