@@ -115,15 +115,16 @@ public class LoginSignUpScript : MonoBehaviour
     {
         // Compare error code to AuthenticationErrorCodes
         // Notify the player with the proper error message
-        Debug.LogException(ex);
-        messages.text = "Exception occures";
+        Debug.LogError(ex.Message);
+
+        messages.text = ex.Message;
     }
     catch (RequestFailedException ex)
     {
         // Compare error code to CommonErrorCodes
         // Notify the player with the proper error message
-        Debug.LogException(ex);
-        messages.text=ex.ToString();
+        Debug.LogError(ex.Message);
+        messages.text=ex.Message;
     }
     }
 
