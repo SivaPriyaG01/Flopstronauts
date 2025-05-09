@@ -28,18 +28,7 @@ public class LoginSignUpScript : MonoBehaviour
     public static string Password;
     //public static string PlayerID;
 }
-    public class User {
-    public string username;
-    public string playerID;
-
-    public User() {
-    }
-
-    public User(string username, string playerID) {
-        this.username = username;
-        this.playerID = playerID;
-    }
-}
+    
     
     async void Awake()
 	{
@@ -101,10 +90,10 @@ public class LoginSignUpScript : MonoBehaviour
         {
             SceneManager.LoadScene("NewMainMenuScene");
         }
-        else
-        {
-            messages.text="Please Sign In";
-        }
+        //else
+        // {
+        //     messages.text="Please Sign In";
+        // }
         
     }
 
@@ -120,6 +109,7 @@ public class LoginSignUpScript : MonoBehaviour
         await AuthenticationService.Instance.SignUpWithUsernamePasswordAsync(username, password);
         //PlayerSession.PlayerID=AuthenticationService.Instance.PlayerId;
         Debug.Log("SignUp is successful.");
+        messages.text="SignUp is Successful";
     }
     catch (AuthenticationException ex)
     {
@@ -133,6 +123,7 @@ public class LoginSignUpScript : MonoBehaviour
         // Compare error code to CommonErrorCodes
         // Notify the player with the proper error message
         Debug.LogException(ex);
+        messages.text=ex.ToString();
     }
     }
 
@@ -148,7 +139,7 @@ public class LoginSignUpScript : MonoBehaviour
         // Compare error code to AuthenticationErrorCodes
         // Notify the player with the proper error message
         Debug.LogException(ex);
-        messages.text = ex.ToString();
+        //messages.text = ex.ToString();
     }
     catch (RequestFailedException ex)
     {
