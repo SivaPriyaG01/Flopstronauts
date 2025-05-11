@@ -14,6 +14,7 @@ using Unity.Services.Leaderboards;
 using Unity.Services.Core;
 using Newtonsoft.Json;
 using Unity.Services.Leaderboards.Models;
+using TMPro;
 
 
 public class LeaderboardScript : MonoBehaviour
@@ -21,6 +22,10 @@ public class LeaderboardScript : MonoBehaviour
     const string LeaderboardId = "FlopstronautsLB";
 
     private Dictionary<string, (string username, int score)> leaderboardData = new();
+    [SerializeField] TMP_Text usernameDisplay;
+    [SerializeField] TMP_Text scoreDisplay;
+    [SerializeField] TMP_Text rankDisplay;
+    [SerializeField] GameObject scoreEntryContainer;
 
     async void Start()
     {
@@ -84,7 +89,10 @@ public class LeaderboardScript : MonoBehaviour
         foreach (var data in leaderboardData)
         {
             Debug.Log($"Username: {data.Value.username} | Score: {data.Value.score}");
+
         }
+
+
     }
 
     // string VersionId { get; set; }
