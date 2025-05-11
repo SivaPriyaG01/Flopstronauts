@@ -26,6 +26,7 @@ public class LeaderboardScript : MonoBehaviour
     [SerializeField] TMP_Text scoreDisplay;
     [SerializeField] TMP_Text rankDisplay;
     [SerializeField] GameObject scoreEntryContainer;
+    [SerializeField] GameObject LeaderboardPanel;
 
     async void Start()
     {
@@ -90,9 +91,22 @@ public class LeaderboardScript : MonoBehaviour
         {
             Debug.Log($"Username: {data.Value.username} | Score: {data.Value.score}");
 
+            AssignValues("1",data.Value.username,data.Value.score.ToString());
         }
 
 
+    }
+
+    private void AssignValues(string rank,string username, string score)
+    {
+        var tempRank=scoreEntryContainer.transform.Find("Rank").gameObject.GetComponent<TextMeshProUGUI>();
+        var tempUsername=scoreEntryContainer.transform.Find("Username").gameObject.GetComponent<TextMeshProUGUI>();
+        var tempScore = scoreEntryContainer.transform.Find("Score").gameObject.GetComponent<TextMeshProUGUI>();
+        tempRank.text=rank;
+        tempUsername.text=username;
+        tempScore.text=score;
+
+        Instantiate(scoreEntryContainer);
     }
 
     // string VersionId { get; set; }
