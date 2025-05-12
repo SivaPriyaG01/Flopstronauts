@@ -4,6 +4,7 @@ using UnityEngine;
 using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
+using System.Threading.Tasks;
 
 public class FirebaseRealtimeDB : MonoBehaviour
 {
@@ -83,5 +84,15 @@ public class FirebaseRealtimeDB : MonoBehaviour
     });
     }
 
+    public async Task<string> GetUsername(string playerID)
+    {
+        var snapshot = await FirebaseDatabase.DefaultInstance.RootReference
+            .Child("users").Child(playerID).GetValueAsync();
+        if (snapshot.Exists && snapshot.Child("username").Exists)
+        {
+            return snapshot.Child("username").Value.ToString();
+        }
+        return "Unknown";
+    }
 
 }
