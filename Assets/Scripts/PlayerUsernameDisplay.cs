@@ -26,4 +26,9 @@ public class PlayerUsernameDisplay : NetworkBehaviour
         }
         
     }
+
+    public string ReturnUsername()
+    {
+        return playerNameDisplayText.text;
+    }
 }
