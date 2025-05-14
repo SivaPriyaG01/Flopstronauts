@@ -40,4 +40,5 @@ public class ScoreCalculation : MonoBehaviour
     {
         playerScore+=score;
     }
+
 }
