@@ -6,12 +6,14 @@ using TMPro;
 public class ScoreCalculation : MonoBehaviour
 {
     int playerScore=150;
-    [SerializeField] TMP_Text displayScore;
-    [SerializeField] GameObject scoreDisplayPanel;
+    TMP_Text displayScore;
+    GameObject scoreDisplayPanel;
     
     // Start is called before the first frame update
     void Start()
     {
+        scoreDisplayPanel = GameObject.Find("ScoreDisplayPanel");
+        displayScore=scoreDisplayPanel.GetComponentInChildren<TMP_Text>();
         scoreDisplayPanel.SetActive(false);
     }
 
