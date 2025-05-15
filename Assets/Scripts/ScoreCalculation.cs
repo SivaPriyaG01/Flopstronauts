@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ScoreCalculation : MonoBehaviour
 {
     int playerScore=150;
-    TMP_Text displayScore;
+    [SerializeField] TMP_Text displayScore;
+    [SerializeField] GameObject scoreDisplayPanel;
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        scoreDisplayPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -33,6 +35,7 @@ public class ScoreCalculation : MonoBehaviour
 
             case "FinishLine":
             UpdatePlayerScore(20);
+            DisplayScore();
             break;
         }    
     }
@@ -44,7 +47,9 @@ public class ScoreCalculation : MonoBehaviour
 
     void DisplayScore()
     {
+        scoreDisplayPanel.SetActive(true);
         displayScore.text="Your Score:" + playerScore.ToString();
     }
+
 
 }
