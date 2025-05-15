@@ -5,6 +5,7 @@ using UnityEngine;
 public class ScoreCalculation : MonoBehaviour
 {
     int playerScore=150;
+    TMP_Text displayScore;
     
     // Start is called before the first frame update
     void Start()
@@ -39,6 +40,11 @@ public class ScoreCalculation : MonoBehaviour
     void UpdatePlayerScore(int score)
     {
         playerScore+=score;
+    }
+
+    void DisplayScore()
+    {
+        displayScore.text="Your Score:" + playerScore.ToString();
     }
 
 }
