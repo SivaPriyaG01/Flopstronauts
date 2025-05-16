@@ -23,9 +23,9 @@ public class ScoreCalculation : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter(Collision other) 
+    private void OnControllerColliderHit(ControllerColliderHit hit) 
     {
-        switch(other.gameObject.tag)
+        switch(hit.gameObject.tag)
         {
             case "Obstacle":
             UpdatePlayerScore(-5);
